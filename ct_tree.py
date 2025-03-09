@@ -3,6 +3,9 @@ from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
 import seaborn as sns
 import matplotlib.pyplot as plt
+from sklearn.metrics import accuracy_score, classification_report
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+import numpy as np
 
 def breif_clustering(X, n_clusters):
 
@@ -19,3 +22,33 @@ def breif_clustering(X, n_clusters):
     plt.legend()
     plt.show()
     return X
+
+def metrics_and_cm(y_pred, y_test):
+    # Presicion
+    accuracy = accuracy_score(y_test, y_pred)
+    print(f"Precisión del modelo: {accuracy:.2f}")
+    print(classification_report(y_test, y_pred))
+    
+    # Matriz de confusion
+    cm = confusion_matrix(y_test, y_pred)
+    plt.figure(figsize=(6, 5))
+    sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=np.unique(y_test), yticklabels=np.unique(y_test))
+    plt.xlabel("Predicted")
+    plt.ylabel("Actual")
+    plt.title("Confusion Matrix")
+    plt.show()
+
+def cv_metrics_and_cm(cv_scores, y, y_pred):
+    # PARA MODELO DE VALIDACION CRUZADA
+    # Presicion
+    print("Precision promedio del modelo:", cv_scores.mean())
+    print(classification_report(y, y_pred))
+    cm = confusion_matrix(y, y_pred)
+
+    # Matriz de confusion
+    plt.figure(figsize=(6, 5))
+    sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=np.unique(y), yticklabels=np.unique(y))
+    plt.xlabel("Predicted")
+    plt.ylabel("Actual")
+    plt.title("Confusion Matrix")
+    plt.show()
